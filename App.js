@@ -1,19 +1,37 @@
-import {HStack,Center,NativeBaseProvider,VStack,IconButton,Button,Card, Text,} from "native-base";
-import React,{useState} from "react";
+import {HStack,Center,NativeBaseProvider,VStack,IconButton,Button,Card, Text,Image} from "native-base";
+import React,{useState,useEffect} from "react";
 import { Ionicons } from '@expo/vector-icons';
 import { Dimensions } from "react-native";
+import { Video } from "expo-av";
 
 
 export default function App() {
   const[RFID,setRFID] = useState(1)
+  const[socketMessage,setSocketMessage]=useState('')
+  var ws = new WebSocket('ws://');
+  ws.onopen(()=>console.log('soccet connection opened'))
+  ws.onclose(()=> console.log('connection closed'))
+  ws.onmessage((msg)=> setSocketMessage(msg) )
+  ws.onerror(()=>console.log('there was an error'))
+  const sendSocketMessage=(msg)=>{
+    ws.OPEN ? ws.send(msg): console.log('the socket is not connected, please reconnect')
+  }
   return (
     <NativeBaseProvider>
       <HStack safeArea width={Dimensions.get('window').width}>
+      <Center width='30%' safeArea borderLeftWidth={2} borderColor='muted.300' pt='32' pb='32' >
+          <IconButton icon={<Ionicons color='green' size={60}  name='chevron-up-circle' />} />
+          <HStack>
+            <IconButton mx={4} icon={<Ionicons color='green' size={60}  name='chevron-forward-circle'/>} />
+            <IconButton mx={4} icon={<Ionicons color='green' size={60}   name='chevron-back-circle' />} />
+          </HStack>
+          <IconButton icon={<Ionicons color='green' size={60}  name='chevron-down-circle' />} />
+        </Center>
         <VStack width='70%' >
           <Center>
             <HStack marginY={5} >
-              <Button colorScheme="darkBlue" mx={4} rightIcon={<Ionicons color='white' size={20} name='speedometer' />}><Text color='white'>Pilot</Text></Button>
-              <Button mx={4} rightIcon={<Ionicons color='white' size={20} name='airplane' />}>Auto-Pilot</Button>
+              <Button onPress={sendSocketMessage('PILOT')} colorScheme="darkBlue" mx={4} rightIcon={<Ionicons color='white' size={20} name='speedometer' />}><Text color='white'>Pilot</Text></Button>
+              <Button onPress={sendSocketMessage('AUTOPILOT')} mx={4} rightIcon={<Ionicons color='white' size={20} name='airplane' />}>Auto-Pilot</Button>
             </HStack>
             <Button  marginY={5} colorScheme="yellow" rightIcon={<Ionicons color='black' size={20} name='bluetooth' />}><Text>Find RFID</Text></Button>
             <Card mt={20} width={250} >
@@ -21,14 +39,7 @@ export default function App() {
             </Card>
           </Center>
         </VStack>
-        <Center width='30%' safeArea borderLeftWidth={2} borderColor='muted.300' pt='32' pb='32' >
-          <IconButton icon={<Ionicons color='green' size={60}  name='chevron-up-circle' />} />
-          <HStack>
-            <IconButton mx={4} icon={<Ionicons color='green' size={60}   name='chevron-back-circle' />} />
-            <IconButton mx={4} icon={<Ionicons color='green' size={60}  name='chevron-forward-circle'/>} />
-          </HStack>
-          <IconButton icon={<Ionicons color='green' size={60}  name='chevron-down-circle' />} />
-        </Center>
+
       </HStack>
     </NativeBaseProvider>
   );
