@@ -20,12 +20,12 @@ export default function App() {
     <NativeBaseProvider>
       <HStack safeArea width={Dimensions.get('window').width}>
       <Center width='30%' safeArea borderLeftWidth={2} borderColor='muted.300' pt='32' pb='32' >
-          <IconButton icon={<Ionicons color='green' size={60}  name='chevron-up-circle' />} />
+          <IconButton onPress={()=> ws.send('UP')} icon={<Ionicons color='green' size={60}  name='chevron-up-circle' />} />
           <HStack>
-            <IconButton mx={4} icon={<Ionicons color='green' size={60}  name='chevron-forward-circle'/>} />
-            <IconButton mx={4} icon={<Ionicons color='green' size={60}   name='chevron-back-circle' />} />
+            <IconButton onPress={()=> ws.send('RIGHT')} mx={4} icon={<Ionicons color='green' size={60}  name='chevron-forward-circle'/>} />
+            <IconButton onPress={()=> ws.send('LEFT')} mx={4} icon={<Ionicons color='green' size={60}   name='chevron-back-circle' />} />
           </HStack>
-          <IconButton icon={<Ionicons color='green' size={60}  name='chevron-down-circle' />} />
+          <IconButton onPress={()=> ws.send('DOWN')} icon={<Ionicons color='green' size={60}  name='chevron-down-circle' />} />
         </Center>
         <VStack width='70%' >
           <Center>
